@@ -4,8 +4,6 @@ plugins {
     kotlin("jvm")
 }
 
-group = "me.znotchill.kiwi"
-version = "unspecified"
 
 repositories {
     mavenCentral()

@@ -17,3 +17,4 @@ rootProject.name = "kiwi"
 include(":core")
 include("generator")
 include("network")
+include("blossom")

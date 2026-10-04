@@ -6,8 +6,6 @@ plugins {
     alias(libs.plugins.kotlinSerialization)
 }
 
-group = "me.znotchill.kiwi"
-version = "1.0.0"
 repositories {
     mavenLocal()
     mavenCentral()
