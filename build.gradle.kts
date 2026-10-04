@@ -1,4 +1,5 @@
 import com.vanniktech.maven.publish.MavenPublishBaseExtension
+import org.gradle.api.publish.PublishingExtension
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform) apply false
@@ -12,16 +13,32 @@ allprojects {
 }
 
 subprojects {
-    fun configurePublishing(artifact: String) {
+    pluginManager.withPlugin("org.jetbrains.kotlin.multiplatform") {
         apply(plugin = "com.vanniktech.maven.publish")
 
         extensions.configure<MavenPublishBaseExtension> {
             coordinates(
                 groupId = "me.znotchill.kiwi",
-                artifactId = artifact,
+                artifactId = project.name,
                 version = rootProject.version.toString()
             )
+        }
+    }
 
+    pluginManager.withPlugin("org.jetbrains.kotlin.jvm") {
+        apply(plugin = "com.vanniktech.maven.publish")
+
+        extensions.configure<MavenPublishBaseExtension> {
+            coordinates(
+                groupId = "me.znotchill.kiwi",
+                artifactId = project.name,
+                version = rootProject.version.toString()
+            )
+        }
+    }
+
+    pluginManager.withPlugin("maven-publish") {
+        extensions.configure<PublishingExtension> {
             repositories {
                 maven {
                     name = "znotchill"
@@ -36,15 +53,5 @@ subprojects {
                 }
             }
         }
-    }
-
-    pluginManager.withPlugin("org.jetbrains.kotlin.multiplatform") {
-        configurePublishing(
-            project.name
-        )
-    }
-
-    pluginManager.withPlugin("org.jetbrains.kotlin.jvm") {
-        configurePublishing(project.name)
     }
 }
