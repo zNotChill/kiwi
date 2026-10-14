@@ -1,5 +1,6 @@
 package me.znotchill.kiwi.blossom.command
 
+import net.kyori.adventure.key.Key
 import net.minestom.server.command.CommandSender
 import net.minestom.server.command.builder.Command
 import net.minestom.server.command.builder.CommandContext
@@ -34,6 +35,17 @@ class CommandBuilder(val command: Command) {
                 block().forEach { suggestion.addEntry(SuggestionEntry(it.toString())) }
             }
         }
+
+        fun onSuggestionFiltered(limit: Int = 50, source: () -> List<Any>) {
+            argument.setSuggestionCallback { _, _, suggestion ->
+                val typed = suggestion.input.substringAfterLast(' ')
+                source().asSequence()
+                    .map { it.toString() }
+                    .filter { it.contains(typed, ignoreCase = true) }
+                    .take(limit)
+                    .forEach { suggestion.addEntry(SuggestionEntry(it)) }
+            }
+        }
     }
 
     inline fun <reified T> argument(
@@ -48,6 +60,7 @@ class CommandBuilder(val command: Command) {
             Float::class -> ArgumentType.Float(name) as Argument<T>
             Boolean::class -> ArgumentType.Boolean(name) as Argument<T>
             UUID::class -> ArgumentType.UUID(name) as Argument<T>
+            Key::class -> ArgumentType.ResourceLocation(name).map { it } as Argument<T>
             else -> error("Unsupported argument type: ${T::class}. Try using its standalone function (e.g. entityArgument<>())")
         }
         return ArgumentBuilder(arg).apply(block).argument
