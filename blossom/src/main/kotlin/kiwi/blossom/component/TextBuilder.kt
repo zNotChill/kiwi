@@ -1,16 +1,16 @@
 package me.znotchill.kiwi.blossom.component
 
-import me.znotchill.kiwi.blossom.extensions.toTextColor
+import me.znotchill.kiwi.generated.Color
+import me.znotchill.kiwi.generated.toTextColor
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.event.ClickEvent
 import net.kyori.adventure.text.event.HoverEvent
 import net.kyori.adventure.text.format.TextDecoration
-import net.minestom.server.color.Color
 
 class TextBuilder(
     val text: String
 ) {
-    var color: Color = Color(255, 255, 255)
+    var color: Color = Color.rgb(255, 255, 255)
     var bold: Boolean = false
     var italic: Boolean = false
     var underline: Boolean = false

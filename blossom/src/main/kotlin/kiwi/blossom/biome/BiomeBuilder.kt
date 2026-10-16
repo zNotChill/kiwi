@@ -1,6 +1,7 @@
 package me.znotchill.kiwi.blossom.biome
 
-import net.minestom.server.color.Color
+import me.znotchill.kiwi.generated.Color
+import me.znotchill.kiwi.generated.toTextColor
 import net.minestom.server.sound.SoundEvent
 import net.minestom.server.world.attribute.AmbientSounds
 import net.minestom.server.world.attribute.EnvironmentAttribute
@@ -47,8 +48,8 @@ class BiomeBuilder {
         )
     }
 
-    fun biomeEffects(block: me.znotchill.kiwi.blossom.biome.BiomeEffectsBuilder.() -> Unit): BiomeEffects {
-        return _root_ide_package_.me.znotchill.kiwi.blossom.biome.BiomeEffectsBuilder()
+    fun biomeEffects(block: BiomeEffectsBuilder.() -> Unit): BiomeEffects {
+        return BiomeEffectsBuilder()
             .apply(block)
             .build()
     }
@@ -76,10 +77,10 @@ class BiomeEffectsBuilder {
 
     fun build(): BiomeEffects {
         return BiomeEffects.builder()
-            .waterColor(waterColor)
-            .foliageColor(foliageColor)
-            .dryFoliageColor(dryFoliageColor)
-            .grassColor(grassColor)
+            .waterColor(waterColor.toTextColor())
+            .foliageColor(foliageColor?.toTextColor())
+            .dryFoliageColor(dryFoliageColor?.toTextColor())
+            .grassColor(grassColor?.toTextColor())
             .grassColorModifier(grassColorModifier)
             .build()
     }

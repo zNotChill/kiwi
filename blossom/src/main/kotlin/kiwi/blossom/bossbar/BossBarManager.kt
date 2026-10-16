@@ -3,21 +3,21 @@ package me.znotchill.kiwi.blossom.bossbar
 import net.minestom.server.entity.Player
 
 object BossBarManager {
-    private val playerBars = mutableMapOf<Player, MutableMap<String, me.znotchill.kiwi.blossom.bossbar.TrackedBossBar>>()
+    private val playerBars = mutableMapOf<Player, MutableMap<String, TrackedBossBar>>()
 
-    fun get(player: Player, id: String): me.znotchill.kiwi.blossom.bossbar.TrackedBossBar? =
+    fun get(player: Player, id: String): TrackedBossBar? =
         playerBars[player]?.get(id)
 
-    fun set(player: Player, bar: me.znotchill.kiwi.blossom.bossbar.TrackedBossBar) {
+    fun set(player: Player, bar: TrackedBossBar) {
         val bars = playerBars.computeIfAbsent(player) { mutableMapOf() }
         bars[bar.id] = bar
         player.showBossBar(bar.bar)
     }
 
-    fun update(player: Player, id: String, block: me.znotchill.kiwi.blossom.bossbar.BossBarBuilder.() -> Unit): me.znotchill.kiwi.blossom.bossbar.TrackedBossBar? {
+    fun update(player: Player, id: String, block: BossBarBuilder.() -> Unit): me.znotchill.kiwi.blossom.bossbar.TrackedBossBar? {
         val existing = get(player, id) ?: return null
 
-        val builder = _root_ide_package_.me.znotchill.kiwi.blossom.bossbar.BossBarBuilder.from(existing.bar).apply(block)
+        val builder = BossBarBuilder.from(existing.bar).apply(block)
         val updatedBar = builder.build()
 
         // update the existing bar to avoid flickering

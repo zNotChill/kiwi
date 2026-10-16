@@ -374,9 +374,17 @@ data class Color(
             )
         }
 
+        /**
+         * Takes a value for H (0-360), S, L in range 0-255
+         */
         fun hsl(h: Float, s: Float, l: Float): Color {
             return Color(hslToRgb(h, s, l))
         }
+
+        fun hslNormalized(h: Float, s: Float, l: Float): Color =
+            hsl(h * 360f, s * 100f, l * 100f)
+        fun hsvNormalized(h: Float, s: Float, v: Float): Color =
+            hsv(h * 360f, s * 100f, v * 100f)
 
         fun random(): Color {
             return rgb(
