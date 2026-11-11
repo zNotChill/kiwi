@@ -36,10 +36,11 @@ kotlin {
             // for twine's data types to support native, so some classes
             // themselves can be a TwineNative wrapper instead of needing Vec2 and
             // LuaVec2Instance for example
-            api("computer.obscure:twine:3.1.5")
+            api("computer.obscure.twine:core:3.1.6")
             implementation(libs.kotlinx.serialization.json)
         }
         jvmMain.dependencies {
+            compileOnly("computer.obscure.twine:engine:3.1.6")
             implementation("net.kyori:adventure-text-minimessage:${project.property("adventure_version")}")
             implementation("net.kyori:adventure-api:${project.property("adventure_version")}")
 
