@@ -3,10 +3,12 @@ package me.znotchill.kiwi.blossom.raycast
 import me.znotchill.kiwi.blossom.extensions.toSmall
 import me.znotchill.kiwi.blossom.pos.SmallPos
 import me.znotchill.kiwi.blossom.raycast.strategies.boundingBoxStrategy
+import me.znotchill.kiwi.blossom.util.crosshairPosition
 import net.minestom.server.coordinate.Pos
 import net.minestom.server.coordinate.Vec
 import net.minestom.server.entity.Entity
 import net.minestom.server.entity.EntityType
+import net.minestom.server.entity.LivingEntity
 import net.minestom.server.instance.Instance
 import net.minestom.server.instance.block.Block
 import net.minestom.server.instance.block.BlockFace
@@ -239,6 +241,41 @@ class SimulatedRaycast(
                 instance = instance,
                 position = start,
                 direction = direction,
+                maxDistance = maxDistance,
+                travelStep = travelStep,
+                journeyStep = journeyStep,
+                nearbyEntityRadius = nearbyEntityRadius,
+                entityHitStrategy = entityHitStrategy,
+                entityFilter = { e ->
+                    e !== excludeEntity &&
+                            excludeEntities?.contains(e) != true &&
+                            (includeTypes == null || e.entityType in includeTypes) &&
+                            excludeTypes?.contains(e.entityType) != true
+                }
+            )
+            ray.execute()
+            return ray.result
+        }
+
+        fun shootFromEntity(
+            entity: Entity,
+            maxDistance: Double = 200.0,
+            travelStep: Double = 0.05,
+            journeyStep: Int = 2,
+            excludeTypes: List<EntityType>? = listOf(),
+            includeTypes: List<EntityType>? = null,
+            excludeEntities: List<Entity>? = null,
+            excludeEntity: Entity? = entity,
+            nearbyEntityRadius: Double = 3.0,
+            entityHitStrategy: EntityHitStrategy = boundingBoxStrategy
+        ): RaycastResult {
+            val pos = if (entity is LivingEntity) {
+                entity.crosshairPosition
+            } else entity.position
+            val ray = SimulatedRaycast(
+                instance = entity.instance,
+                position = pos,
+                direction = entity.position.direction(),
                 maxDistance = maxDistance,
                 travelStep = travelStep,
                 journeyStep = journeyStep,
