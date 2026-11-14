@@ -39,6 +39,13 @@ class CommandBuilder(val command: Command) {
         fun onSuggestionFiltered(limit: Int = 50, source: () -> List<Any>) {
             argument.setSuggestionCallback { _, _, suggestion ->
                 val typed = suggestion.input.substringAfterLast(' ')
+                if (typed.isEmpty()) {
+                    source().asSequence()
+                        .forEach {
+                            suggestion.addEntry(SuggestionEntry(it as String?))
+                        }
+                    return@setSuggestionCallback
+                }
                 source().asSequence()
                     .map { it.toString() }
                     .filter { it.contains(typed, ignoreCase = true) }
