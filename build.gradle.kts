@@ -9,7 +9,7 @@ plugins {
 
 allprojects {
     group = "me.znotchill.kiwi"
-    version = "1.0.3"
+    version = "1.0.4"
 }
 
 subprojects {
